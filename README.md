@@ -1,9 +1,11 @@
-# NEAR Wallet Feature Flags
+# LIT Feature Flags
 
-This package enables the use of feature flags across NEAR Wallet. These feature flags serve as code guards around
-functionality being implemented, enabling developers to iterate on more complex features while still being able to
-deploy small changes. Feature flags are enabled per environment, allowing finer granularity on how the functionality
-is rolled out.
+This is a fork of [NEAR Wallet Feature Flags](@near-wallet/feature-flags) with modernization and
+other enhancements (no more global binary binstall)!
+
+Feature flags serve as code guards around functionality being implemented, enabling developers to
+iterate on more complex features while still being able to deploy small changes. Feature flags are
+enabled per environment, allowing finer granularity on how the functionality is rolled out.
 
 # Getting started
 
@@ -15,8 +17,8 @@ Running the flag tool prompts the user for the intended action, currently one of
 - Modifying an existing feature flag to be enabled or disabled in the desired environments.
 - Deleting an existing feature flag.
 
-Running the `lit-flag` tool requires a `features/` directory along the current path, the closest of which will be used
-by the binary.
+Running the `lit-flag` tool requires a `features/` directory along the current path, the closest of
+which will be used by the binary.
 
 ## NOTE: `lit-flag` is responsible for both generating and modifying files in this directory, so it is crucial
 
@@ -24,28 +26,33 @@ that no changes are made to this directory's contents outside the `lit-flag` bin
 
 # Using Feature Flags
 
-In order to use this package, a `features/` directory must be created at the appropriate level (e.g. the project root) with
-the following files:
+In order to use this package, a `features/` directory must be created at the appropriate level (e.g.
+the project root) with the following files:
 
-- `environments.json`: The valid environments for the application, in the form of `"ENV_NAME": "env_value"`.
-- `flags.json`: The set of flags enabled per environment. During initial configuration this should be an empty JSON file.
-- `features.js`: Module responsible for initializing and exporting the feature flags for use in the target project.
+- `environments.json`: The valid environments for the application, in the form of
+  `"ENV_NAME": "env_value"`.
+- `flags.json`: The set of flags enabled per environment. During initial configuration this should
+  be an empty JSON file.
+- `features.js`: Module responsible for initializing and exporting the feature flags for use in the
+  target project.
 
-The `features.js` module is responsible for initializing the proxy object via the `initFeatureFlags` method exported from
-this package. This method requires three parameters:
+The `features.js` module is responsible for initializing the proxy object via the `initFeatureFlags`
+method exported from this package. This method requires three parameters:
 
-- `currentEnvironment`: The environment against which flags should be validated. The provided value must be a valid value in `environments.json` or an exception will be thrown.
+- `currentEnvironment`: The environment against which flags should be validated. The provided value
+  must be a valid value in `environments.json` or an exception will be thrown.
 - `environments`: The set of valid environments, specified in `environments.json`.
 - `flagState`: The set of defined feature flags, specified in `flags.json`.
 
-Once configured, the proxy object returned from `initFeatureFlags` is used to check the state of a feature by referring to
-the flag name, e.g. `const isFeatureXEnabled = Features.FEATURE_X`. The proxy object will throw an exception if the
-flag does not exist.
+Once configured, the proxy object returned from `initFeatureFlags` is used to check the state of a
+feature by referring to the flag name, e.g. `const isFeatureXEnabled = Features.FEATURE_X`. The
+proxy object will throw an exception if the flag does not exist.
 
 # Examples
 
-The following outlines initial example templates for the required files mentioned above. This code is required to correctly
-set up the `Features` proxy object for use in a project. Note that depending on your project, you may need a different `features.js` file.
+The following outlines initial example templates for the required files mentioned above. This code
+is required to correctly set up the `Features` proxy object for use in a project. Note that
+depending on your project, you may need a different `features.js` file.
 
 #### features/environments.json
 

@@ -2,5 +2,6 @@
   "plugins": ["./node_modules/prettier-plugin-jsdoc/dist/index.js"],
   "trailingComma": "es5",
   "singleQuote": true,
-  "semi": true
+  "semi": true,
+  "proseWrap": "always"
 }
