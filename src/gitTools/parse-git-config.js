@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /*!
  * parse-git-config <https://github.com/jonschlinkert/parse-git-config>
  *
@@ -9,8 +11,11 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const util = require('util');
+
 const ini = require('ini');
+
 const configPath = require('./git-config-path');
+
 const expand = (str) => (str ? str.replace(/^~/, os.homedir()) : '');
 
 /**
@@ -56,9 +61,9 @@ const parse = (options, callback) => {
 };
 
 parse.promise = (options) => {
-  let filepath = parse.resolveConfigPath(options);
-  let read = util.promisify(fs.readFile);
-  let stat = util.promisify(fs.stat);
+  const filepath = parse.resolveConfigPath(options);
+  const read = util.promisify(fs.readFile);
+  const stat = util.promisify(fs.stat);
   if (!filepath) return Promise.resolve(null);
 
   return stat(filepath)
@@ -88,12 +93,12 @@ parse.promise = (options) => {
  */
 
 parse.sync = (options) => {
-  let filepath = parse.resolveConfigPath(options);
+  const filepath = parse.resolveConfigPath(options);
 
   if (filepath && fs.existsSync(filepath)) {
     let input = fs.readFileSync(filepath, 'utf8');
     if (options && options.include === true) {
-      let cwd = path.resolve(path.dirname(filepath));
+      const cwd = path.resolve(path.dirname(filepath));
       input = injectInclude(input, cwd);
     }
     return parseIni(input, options);
@@ -106,7 +111,7 @@ parse.sync = (options) => {
 
 parse.resolveConfigPath = (options) => {
   if (typeof options === 'string') options = { type: options };
-  const opts = Object.assign({ cwd: process.cwd() }, options);
+  const opts = { cwd: process.cwd(), ...options };
   const fp = opts.path ? expand(opts.path) : configPath(opts.type);
   return fp ? path.resolve(opts.cwd, fp) : null;
 };
@@ -130,10 +135,10 @@ parse.resolve = (options) => parse.resolveConfigPath(options);
  */
 
 parse.expandKeys = (config) => {
-  for (let key of Object.keys(config)) {
-    let m = /(\S+) "(.*)"/.exec(key);
+  for (const key of Object.keys(config)) {
+    const m = /(\S+) "(.*)"/.exec(key);
     if (!m) continue;
-    let prop = m[1];
+    const prop = m[1];
     config[prop] = config[prop] || {};
     config[prop][m[2]] = config[key];
     delete config[key];
@@ -142,13 +147,13 @@ parse.expandKeys = (config) => {
 };
 
 function parseIni(str, options) {
-  let opts = Object.assign({}, options);
+  const opts = { ...options };
 
-  str = str.replace(/\[(\S+) "(.*)"\]/g, (m, $1, $2) => {
-    return $1 && $2 ? `[${$1} "${$2.split('.').join('\\.')}"]` : m;
-  });
+  str = str.replace(/\[(\S+) "(.*)"\]/g, (m, $1, $2) =>
+    $1 && $2 ? `[${$1} "${$2.split('.').join('\\.')}"]` : m
+  );
 
-  let config = ini.parse(str);
+  const config = ini.parse(str);
   if (opts.expandKeys === true) {
     return parse.expandKeys(config);
   }
@@ -156,15 +161,15 @@ function parseIni(str, options) {
 }
 
 function injectInclude(input, cwd) {
-  let lines = input.split('\n').filter((line) => line.trim() !== '');
-  let len = lines.length;
-  let res = [];
+  const lines = input.split('\n').filter((line) => line.trim() !== '');
+  const len = lines.length;
+  const res = [];
 
   for (let i = 0; i < len; i++) {
-    let line = lines[i];
+    const line = lines[i];
     if (line.indexOf('[include]') === 0) {
-      let filepath = lines[i + 1].replace(/^\s*path\s*=\s*/, '');
-      let fp = path.resolve(cwd, expand(filepath));
+      const filepath = lines[i + 1].replace(/^\s*path\s*=\s*/, '');
+      const fp = path.resolve(cwd, expand(filepath));
       res.push(fs.readFileSync(fp));
     } else {
       res.push(line);

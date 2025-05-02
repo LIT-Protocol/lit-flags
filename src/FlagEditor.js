@@ -1,15 +1,15 @@
-const fsx = require('fs-extra');
 const path = require('path');
 
-const getGitUsername = require('./gitTools/git-user-name');
+const fsx = require('fs-extra');
 
 const { ACTIONS } = require('./constants');
+const getGitUsername = require('./gitTools/git-user-name');
 
 const CONFIG_DIRECTORY = 'features';
 const FLAGS_FILENAME = 'flags.json';
 const FEATURES_TYPEDEF_FILENAME = 'features.d.ts';
 const ENVIRONMENTS_FILENAME = 'environments.json';
-const ENABLE_DEBUG_LOGGING = process.env.NEAR_FLAG_DEBUG === 'true' || false;
+const ENABLE_DEBUG_LOGGING = process.env.LIT_FLAG_DEBUG === 'true' || false;
 
 class FlagEditor {
   constructor({ prompts }) {
@@ -22,7 +22,9 @@ class FlagEditor {
   }
 
   log(...args) {
-    ENABLE_DEBUG_LOGGING && console.log(...args);
+    if (ENABLE_DEBUG_LOGGING) {
+      console.log(...args);
+    }
   }
 
   async init() {
@@ -72,6 +74,8 @@ class FlagEditor {
         await this.removeEnvironment(environmentName);
         break;
       }
+      default:
+        return;
     }
 
     await this.saveEnvironments();
@@ -82,8 +86,8 @@ class FlagEditor {
   async setFlagState(flagName, userEditing) {
     const flagEntry = this._flagsState[flagName];
     const environmentsEnabledIn = await this.prompts.getEnvironmentStates({
-      environments: this._environments,
       flagEntry,
+      environments: this._environments,
     });
 
     this._flagsState = {
@@ -100,19 +104,19 @@ class FlagEditor {
       const perEnvEntry = (flagEntry && flagEntry[name]) || {};
 
       const enabled = environmentsEnabledIn.includes(name);
-      let isEditing = enabled !== perEnvEntry.enabled;
+      const isEditing = enabled !== perEnvEntry.enabled;
 
       perEnvEntries[name] = {
         ...perEnvEntry,
         enabled,
-        lastEditedBy: !isEditing ? perEnvEntry.lastEditedBy : userEditing,
         lastEditedAt: !isEditing ? perEnvEntry.lastEditedAt : new Date().toISOString(),
+        lastEditedBy: !isEditing ? perEnvEntry.lastEditedBy : userEditing,
       };
     });
 
     return {
-      createdBy: flagEntry ? flagEntry.createdBy : userEditing,
       createdAt: flagEntry ? flagEntry.createdAt : new Date().toISOString(),
+      createdBy: flagEntry ? flagEntry.createdBy : userEditing,
       ...perEnvEntries,
     };
   }
@@ -126,8 +130,8 @@ class FlagEditor {
     Object.entries(this._flagsState).forEach(([flagName, flagState]) => {
       this._flagsState[flagName][environmentName] = {
         ...flagState[sourceEnvironment],
-        lastEditedBy: userEditing,
         lastEditedAt: new Date().toISOString(),
+        lastEditedBy: userEditing,
       };
     });
   }
@@ -150,6 +154,7 @@ class FlagEditor {
     let currPath = path.join(dir, base);
 
     while (!fileFound && currPath && currPath !== root) {
+      // eslint-disable-next-line no-await-in-loop
       fileFound = await fsx.exists(path.join(currPath, CONFIG_DIRECTORY, FLAGS_FILENAME));
 
       if (!fileFound) {
@@ -159,7 +164,7 @@ class FlagEditor {
 
     if (!fileFound) {
       throw new Error(
-        `Could not find a ${FLAGS_FILENAME} in CWD or any parent dir. Run this tool from a NEAR repo!`
+        `Could not find a ${FLAGS_FILENAME} in CWD or any parent dir. See README.md for more info.`
       );
     }
 
@@ -204,7 +209,7 @@ class FlagEditor {
     const flagOutput = Object.keys(this._flagsState)
       .sort()
       .reduce((flagsState, flagName) => {
-        flagsState[flagName] = this._flagsState[flagName];
+        flagsState[flagName] = this._flagsState[flagName]; // eslint-disable-line no-param-reassign
         return flagsState;
       }, {});
 

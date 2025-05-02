@@ -1,11 +1,10 @@
+/* eslint-disable */
 /*!
  * git-config-path <https://github.com/jonschlinkert/git-config-path>
  *
  * Copyright (c) 2015-present, Jon Schlinkert.
  * Licensed under the MIT License.
  */
-
-'use strict';
 
 const fs = require('fs');
 const os = require('os');
@@ -17,7 +16,7 @@ module.exports = function (type, options) {
     type = null;
   }
 
-  let opts = Object.assign({ cwd: process.cwd(), type }, options);
+  const opts = { type, cwd: process.cwd(), ...options };
   let configPath;
 
   if (opts.type === 'global') {

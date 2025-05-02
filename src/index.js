@@ -1,13 +1,15 @@
-function initFeatureFlags({ flagState, currentEnvironment, environments }) {
+function initFeatureFlags({ environments, envVarName, flagState }) {
+  const currentEnvironment = process.env[envVarName];
+
   if (typeof flagState !== 'object') {
     throw Error('invalid flags');
   }
 
   if (!Object.values(environments).includes(currentEnvironment)) {
-    throw Error(`
-invalid environment "${currentEnvironment}", the NEAR_WALLET_ENV environment variable must be set to one of:
-${Object.values(environments).join(', ')}
-        `);
+    throw Error(
+      `invalid environment "${currentEnvironment}", ${envVarName} must be set to one of:
+      ${Object.values(environments).join(', ')}`
+    );
   }
 
   return new Proxy(flagState, {

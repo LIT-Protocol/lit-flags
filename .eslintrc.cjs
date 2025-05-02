@@ -37,7 +37,7 @@ module.exports = {
         'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
       },
       rules: {
-        'no-console': 'error',
+        'no-console': 'off',
         'import/prefer-default-export': ['off'],
         'import/no-default-export': ['error'],
         'import/no-relative-packages': ['error'],

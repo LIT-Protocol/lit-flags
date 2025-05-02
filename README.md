@@ -7,20 +7,20 @@ is rolled out.
 
 # Getting started
 
-Modifying feature flags requires the use of the `flag` binary, installed by running:
+Modifying feature flags is done by running `npx lit-flag`
 
-`yarn binstall`
-
-This creates the `flag` binary under `/usr/local/bin/flag`. Running the binary prompts the user for the intended action,
-currently one of:
+Running the flag tool prompts the user for the intended action, currently one of:
 
 - Creating a new feature flag and setting the environments in which it should be enabled.
 - Modifying an existing feature flag to be enabled or disabled in the desired environments.
 - Deleting an existing feature flag.
 
-Running the `flag` binary requires a `features/` directory along the current path, the closest of which will be used
-by the binary. `flag` is responsible for both generating and modifying the files in this directory, so it is crucial
-that no changes are made to this directory's contents outside the `flag` binary once configured.
+Running the `lit-flag` tool requires a `features/` directory along the current path, the closest of which will be used
+by the binary.
+
+## NOTE: `lit-flag` is responsible for both generating and modifying files in this directory, so it is crucial
+
+that no changes are made to this directory's contents outside the `lit-flag` binary once configured.
 
 # Using Feature Flags
 
@@ -45,14 +45,15 @@ flag does not exist.
 # Examples
 
 The following outlines initial example templates for the required files mentioned above. This code is required to correctly
-set up the `Features` proxy object for use in a project.
+set up the `Features` proxy object for use in a project. Note that depending on your project, you may need a different `features.js` file.
 
 #### features/environments.json
 
 ```json
 {
-  "TESTNET": "testnet",
-  "MAINNET": "mainnet"
+  "LOCALDEV": "development",
+  "PREVIEW": "testnet",
+  "PRODUCTION": "mainnet"
 }
 ```
 
@@ -65,13 +66,15 @@ set up the `Features` proxy object for use in a project.
 #### features/features.js
 
 ```js
-const { initFeatureFlags } = require('@near-wallet/feature-flags');
+const { initFeatureFlags } = require('@lit-protocol/flags');
 
 const Environments = require('./environments.json');
-const Flags = require('./environments.json');
+const Flags = require('./flags.json');
+
+const envVarName = 'LIT_FEATURE_ENV';
 
 const Features = initFeatureFlags({
-  currentEnvironment: process.env.NEAR_WALLET_ENV, // this can be any environment-derived value so long as it matches a value from environments.json
+  envVarName,
   environments: Environments,
   flagState: Flags,
 });

@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*!
  * git-user-name <https://github.com/jonschlinkert/git-user-name>
  *

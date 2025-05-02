@@ -1,6 +1,6 @@
 {
-  "name": "@lit-protocol/feature-flags",
-  "version": "1.0.0",
+  "name": "@lit-protocol/flags",
+  "version": "0.0.1",
   "main": "src/index.js",
   "license": "MIT",
   "packageManager": "pnpm@10.7.0",
@@ -15,7 +15,13 @@
     "dist"
   ],
   "bin": {
-    "lit-feature-flags": "./dist/bin/flag-editor.cjs"
+    "lit-flags": "./dist/bin/flag-editor.cjs"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
   },
   "dependencies": {
     "fs-extra": "^10.0.0",

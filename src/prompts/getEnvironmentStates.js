@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 
 module.exports = async function getEnvironmentStates({ environments, flagEntry }) {
-  let choices = [];
+  const choices = [];
 
   Object.values(environments).forEach((name) => {
     choices.push({
@@ -11,10 +11,10 @@ module.exports = async function getEnvironmentStates({ environments, flagEntry }
   });
 
   const { flagStateByEnvironment } = await inquirer.prompt({
+    choices,
+    message: 'Select the environments you want this flag enabled in',
     name: 'flagStateByEnvironment',
     type: 'checkbox',
-    message: 'Select the environments you want this flag enabled in',
-    choices,
   });
 
   return flagStateByEnvironment;
