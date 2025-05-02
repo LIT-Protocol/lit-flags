@@ -1,0 +1,13 @@
+{
+  "extends": ["@tsconfig/node20/tsconfig.json"],
+  "strictNullChecks": true,
+  "allowJs": true,
+  "types": ["node"],
+  "include": ["src/**/*", "src/bin/flag-editor.js"],
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "outDir": "./dist"
+  }
+}
