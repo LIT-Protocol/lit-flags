@@ -9,7 +9,7 @@ enabled per environment, allowing finer granularity on how the functionality is 
 
 # Getting started
 
-Modifying feature flags is done by running `npx lit-flag`
+Modifying feature flags is done by running using your package manage to execute it -- e.g. `pnpx @lit-protocol/flags`.
 
 Running the flag tool prompts the user for the intended action, currently one of:
 
@@ -17,12 +17,10 @@ Running the flag tool prompts the user for the intended action, currently one of
 - Modifying an existing feature flag to be enabled or disabled in the desired environments.
 - Deleting an existing feature flag.
 
-Running the `lit-flag` tool requires a `features/` directory along the current path, the closest of
+Running the `@lit-protocol/flags` tool requires a `features/` directory along the current path, the closest of
 which will be used by the binary.
 
-## NOTE: `lit-flag` is responsible for both generating and modifying files in this directory, so it is crucial
-
-that no changes are made to this directory's contents outside the `lit-flag` binary once configured.
+## NOTE: `lit-flag` is responsible for both generating and modifying files in this directory, so it is crucial that no changes are made to this directory's contents outside the `@lit-protocol/flags` tool once configured.
 
 # Using Feature Flags
 
