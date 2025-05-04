@@ -4,7 +4,7 @@
  */
 module.exports = {
   root: true,
-  env: { node: true },
+  env: { node: true, jest: true },
   parserOptions: {
     project: true,
   },

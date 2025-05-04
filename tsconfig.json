@@ -3,7 +3,6 @@
   "strictNullChecks": true,
   "allowJs": true,
   "checkJs": false,
-  "types": ["node"],
   "include": ["wat.ts", "./src/*", "./src/bin/flag-editor.ts"],
   "exclude": ["*.js", "*.d.ts"],
   "compilerOptions": {
