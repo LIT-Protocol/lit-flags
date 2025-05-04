@@ -1,5 +1,7 @@
 import { input, rawlist } from '@inquirer/prompts';
 
+import { isValidScreamingSnakeCase } from '../isValidScreamingSnakeCase';
+
 interface NewEnvironmentSetup {
   environmentName: string;
   sourceEnvironment: string;
@@ -14,6 +16,13 @@ export async function setupNewEnvironment(
       if (existingEnvironments.includes(value)) {
         return `${value} already exists!`;
       }
+
+      const { errorMessage, isValid } = isValidScreamingSnakeCase(value);
+
+      if (!isValid) {
+        return errorMessage;
+      }
+
       return true;
     },
   });

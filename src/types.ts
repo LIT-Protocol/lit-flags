@@ -36,19 +36,3 @@ export interface AddEnvironmentOptions {
   sourceEnvironment: string;
   userEditing: string | null;
 }
-
-// Complete configuration for creating a FlagEditor instance
-export interface FlagEditorConfig {
-  configPath: string;
-  environments: Environments;
-  environmentsFilepath: string;
-  flagsFilepath: string;
-  flagsState: FlagsState;
-  prompts: Prompts;
-  userEditing: string | null;
-}
-
-// Options for loading a FlagEditor
-export interface FlagEditorOptions {
-  prompts: Prompts;
-}

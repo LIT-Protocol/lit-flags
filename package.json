@@ -1,6 +1,6 @@
 {
   "name": "@lit-protocol/flags",
-  "version": "0.0.2-alpha.7",
+  "version": "0.0.2-alpha.9",
   "license": "MIT",
   "packageManager": "pnpm@10.7.0",
   "publishConfig": {
@@ -27,7 +27,9 @@
     "lint": "pnpm eslint ./src",
     "build": "pnpm unbuild --parallel",
     "prepare": "husky",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "pnpm build",
+    "preflags": "pnpm build",
+    "flags": "node dist/bin/flag-editor.cjs"
   },
   "devDependencies": {
     "@inquirer/prompts": "^7.5.0",

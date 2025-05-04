@@ -1,0 +1,6 @@
+{
+  "LOCALDEV": "development",
+  "PREVIEW": "preview",
+  "PRODUCTION": "production",
+  "STAGING": "staging"
+}
