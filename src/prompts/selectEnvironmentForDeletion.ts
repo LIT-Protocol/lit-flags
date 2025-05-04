@@ -1,7 +1,11 @@
-const inquirer = require('inquirer');
+import { confirm, rawlist } from '@inquirer/prompts';
 
-module.exports = async function selectExistingEnvironment(environments) {
-  const { proceed } = await inquirer.prompt({
+import type { Environments } from '../types';
+
+export async function selectEnvironmentForDeletion(
+  environments: Environments
+): Promise<string | null> {
+  const proceed = await confirm({
     message: `
 💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥
 Removing existing environments WILL break any production environments using this configuration.
@@ -10,20 +14,21 @@ Only proceed if the target environment is no longer active.
 Continue?
 💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥
 `,
-    name: 'proceed',
-    type: 'confirm',
   });
 
   if (!proceed) {
     return null;
   }
 
-  const { environmentName } = await inquirer.prompt({
-    choices: environments,
+  const environmentChoices = Object.entries(environments).map(([key, value]) => ({
+    value,
+    name: key,
+  }));
+
+  const environmentName = await rawlist({
+    choices: environmentChoices,
     message: 'Select the environment you wish to modify',
-    name: 'environmentName',
-    type: 'list',
   });
 
   return environmentName;
-};
+}

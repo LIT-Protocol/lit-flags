@@ -2,11 +2,12 @@
   "extends": ["@tsconfig/node20/tsconfig.json"],
   "strictNullChecks": true,
   "allowJs": true,
+  "checkJs": false,
   "types": ["node"],
-  "include": ["src/**/*", "src/bin/flag-editor.js"],
+  "include": ["wat.ts", "./src/*", "./src/bin/flag-editor.ts"],
+  "exclude": ["*.js", "*.d.ts"],
   "compilerOptions": {
-    "module": "esnext",
-    "moduleResolution": "Bundler",
+    "module": "nodenext",
     "strict": true,
     "outDir": "./dist"
   }

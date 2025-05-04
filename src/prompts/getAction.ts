@@ -1,9 +1,9 @@
-const inquirer = require('inquirer');
+import { rawlist } from '@inquirer/prompts';
 
-const { ACTIONS } = require('../constants');
+import { ACTIONS } from '../constants';
 
-module.exports = async function actionPrompt(hasFlags) {
-  const { action } = await inquirer.prompt({
+export async function getAction(hasFlags: boolean): Promise<string> {
+  const action = await rawlist<string>({
     choices: hasFlags
       ? [
           ACTIONS.ADD_FLAG,
@@ -13,11 +13,8 @@ module.exports = async function actionPrompt(hasFlags) {
           ACTIONS.REMOVE_ENVIRONMENT,
         ]
       : [ACTIONS.ADD_FLAG, ACTIONS.ADD_ENVIRONMENT, ACTIONS.REMOVE_ENVIRONMENT],
-    default: hasFlags ? ACTIONS.EDIT_FLAG : ACTIONS.ADD_FLAG,
     message: 'What do you want to do?',
-    name: 'action',
-    type: 'list',
   });
 
   return action;
-};
+}
