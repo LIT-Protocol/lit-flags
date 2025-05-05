@@ -69,6 +69,10 @@ export class FlagEditor {
     }
 
     switch (action) {
+      case ACTIONS.LIST_FLAGS: {
+        this.commands.listFlags(this.flagsState, this.environments);
+        break;
+      }
       case ACTIONS.ADD_FLAG: {
         const flagName = await this.commands.getNewFlagName(flagNames);
         await this.setFlagState(flagName, this.userEditing);
