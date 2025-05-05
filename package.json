@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "packageManager": "pnpm@10.7.0",
+  "repository": "https://github.com/LIT-Protocol/lit-flags",
   "publishConfig": {
     "access": "public"
   },
