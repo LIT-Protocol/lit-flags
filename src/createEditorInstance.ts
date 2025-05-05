@@ -1,7 +1,7 @@
+import * as commands from './commands';
 import { FlagEditor } from './FlagEditor';
 import * as flagStorage from './flagStorage';
 import getGitUsername from './gitTools/git-user-name';
-import * as prompts from './prompts';
 
 /**
  * Creates and runs a flag editor instance, handling all data loading and saving. Errors are allowed
@@ -22,9 +22,9 @@ export async function createEditorInstance(): Promise<void> {
 
   // Create editor instance directly with constructor
   const editor = new FlagEditor({
+    commands,
     environments,
     flagsState,
-    prompts,
     userEditing,
   });
 

@@ -1,26 +1,22 @@
-import { enterNewFlagName } from './enterNewFlagName';
-import { getAction } from './getAction';
-import { getEnabledEnvironments } from './getEnabledEnvironments';
-import { selectEnvironmentForDeletion } from './selectEnvironmentForDeletion';
-import { selectExistingFlag } from './selectExistingFlag';
-import { setupNewEnvironment } from './setupNewEnvironment';
+import { selectEnvForDeletionPrompt } from './deleteEnv/selectEnvForDelete';
+import { shouldDeleteEnvPrompt } from './deleteEnv/shouldDeleteEnv';
+import { getNewFlagNamePrompt } from './getNewFlagName';
+import { getNewEnvNamePrompt } from './newEnv/getNewEnvName';
+import { selectSourceEnvPrompt } from './newEnv/selectSourceEnv';
+import { selectActionPrompt } from './selectActionPrompt';
+import { selectEnabledEnvsPrompt } from './selectEnabledEnvs';
+import { selectExistingFlagPrompt } from './selectExistingFlag';
+import { createPrompt, runPrompt } from './utils';
 
-// Export all the prompt functions
 export {
-  getAction,
-  enterNewFlagName,
-  getEnabledEnvironments,
-  selectEnvironmentForDeletion,
-  selectExistingFlag,
-  setupNewEnvironment,
-};
-
-// Create and export a type definition based on this module's exports
-export type Prompts = {
-  enterNewFlagName: typeof enterNewFlagName;
-  getAction: typeof getAction;
-  getEnabledEnvironments: typeof getEnabledEnvironments;
-  selectEnvironmentForDeletion: typeof selectEnvironmentForDeletion;
-  selectExistingFlag: typeof selectExistingFlag;
-  setupNewEnvironment: typeof setupNewEnvironment;
+  selectEnvForDeletionPrompt,
+  shouldDeleteEnvPrompt,
+  getNewFlagNamePrompt,
+  getNewEnvNamePrompt,
+  selectSourceEnvPrompt,
+  selectActionPrompt,
+  selectEnabledEnvsPrompt,
+  selectExistingFlagPrompt,
+  createPrompt,
+  runPrompt,
 };

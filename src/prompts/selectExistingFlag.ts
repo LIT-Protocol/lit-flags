@@ -1,10 +1,11 @@
-import { rawlist } from '@inquirer/prompts';
+import { select } from '@inquirer/prompts';
 
-export async function selectExistingFlag(flagNames: string[]): Promise<string> {
-  const flagName = await rawlist<string>({
+import { createPrompt } from './utils';
+
+export const selectExistingFlagPrompt = createPrompt<string, [string[]]>({
+  getConfig: (flagNames: string[]) => ({
     choices: flagNames,
     message: 'Select the flag you wish to modify',
-  });
-
-  return flagName;
-}
+  }),
+  prompt: select,
+});

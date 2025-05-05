@@ -11,6 +11,9 @@ importers:
       '@inquirer/prompts':
         specifier: ^7.5.0
         version: 7.5.0(@types/node@20.17.32)
+      '@inquirer/testing':
+        specifier: ^2.1.46
+        version: 2.1.46(@types/node@20.17.32)
       '@tsconfig/node20':
         specifier: ^20.1.5
         version: 20.1.5
@@ -562,6 +565,15 @@ packages:
 
   '@inquirer/select@4.2.0':
     resolution: {integrity: sha512-KkXQ4aSySWimpV4V/TUJWdB3tdfENZUU765GjOIZ0uPwdbGIG6jrxD4dDf1w68uP+DVtfNhr1A92B+0mbTZ8FA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+
+  '@inquirer/testing@2.1.46':
+    resolution: {integrity: sha512-sTdl+ouiL11X3frBzgehTeXzVV+/A97L70QZ3FL41IA5omo0RSbfQBnBjyGuSnC3nU+CoqQYQrpRMIpmAdVjCw==}
     engines: {node: '>=18'}
     peerDependencies:
       '@types/node': '>=18'
@@ -4101,6 +4113,14 @@ snapshots:
       '@inquirer/type': 3.0.6(@types/node@20.17.32)
       ansi-escapes: 4.3.2
       yoctocolors-cjs: 2.1.2
+    optionalDependencies:
+      '@types/node': 20.17.32
+
+  '@inquirer/testing@2.1.46(@types/node@20.17.32)':
+    dependencies:
+      '@inquirer/type': 3.0.6(@types/node@20.17.32)
+      ansi-escapes: 4.3.2
+      mute-stream: 2.0.0
     optionalDependencies:
       '@types/node': 20.17.32
 

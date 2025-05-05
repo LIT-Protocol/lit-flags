@@ -1,9 +1,10 @@
 import { input } from '@inquirer/prompts';
 
 import { isValidScreamingSnakeCase } from '../isValidScreamingSnakeCase';
+import { createPrompt } from './utils';
 
-export async function enterNewFlagName(existingFlagNames: string[]): Promise<string> {
-  const flagName = await input({
+export const getNewFlagNamePrompt = createPrompt<string, [string[]]>({
+  getConfig: (existingFlagNames: string[]) => ({
     message: 'Enter the name of the new flag',
     validate: (value: string) => {
       if (existingFlagNames.includes(value)) {
@@ -18,7 +19,6 @@ export async function enterNewFlagName(existingFlagNames: string[]): Promise<str
 
       return true;
     },
-  });
-
-  return flagName;
-}
+  }),
+  prompt: input,
+});

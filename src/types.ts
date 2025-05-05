@@ -1,5 +1,3 @@
-import { Prompts } from './prompts';
-
 // Map of environment keys to environment names
 export type Environments = Record<string, string>;
 
@@ -33,6 +31,6 @@ export interface FlagEntryOptions {
 // Options for adding a new environment
 export interface AddEnvironmentOptions {
   environmentName: string;
-  sourceEnvironment: string;
+  sourceEnvironment: string | null;
   userEditing: string | null;
 }
