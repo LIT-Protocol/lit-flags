@@ -1,7 +1,6 @@
+import { pathExists, readJson, writeFile, writeJson } from 'fs-extra';
 // flagStorage.ts
 import path from 'path';
-
-import fsx from 'fs-extra';
 
 import { Environments, FlagsState } from './types';
 
@@ -12,35 +11,20 @@ const FEATURES_TYPEDEF_FILENAME = 'features.ts';
 const ENVIRONMENTS_FILENAME = 'environments.json';
 const ENABLE_DEBUG_LOGGING = process.env.LIT_FLAG_DEBUG === 'true' || false;
 
-/** Logs debug information if debugging is enabled */
-export function log(...args: any[]): void {
-  if (ENABLE_DEBUG_LOGGING) {
-    console.log(...args);
-  }
-}
+/** Verifies that only one type definition file exists */
+export async function checkTypedefs({
+  typeDefPathJavascript,
+  typeDefPathTypescript,
+}: {
+  typeDefPathJavascript: string;
+  typeDefPathTypescript: string;
+}): Promise<{ jsExists: boolean; tsExists: boolean }> {
+  const [jsExists, tsExists] = await Promise.all([
+    pathExists(typeDefPathJavascript),
+    pathExists(typeDefPathTypescript),
+  ]);
 
-/** Resolves the configuration path by walking up directories until a flags.json file is found. */
-export async function resolveConfigPath(): Promise<string> {
-  const { base, dir, root } = path.parse(process.cwd());
-  let fileFound = false;
-  let currPath = path.join(dir, base);
-
-  while (!fileFound && currPath && currPath !== root) {
-    // eslint-disable-next-line no-await-in-loop
-    fileFound = await fsx.pathExists(path.join(currPath, CONFIG_DIRECTORY, FLAGS_FILENAME));
-
-    if (!fileFound) {
-      currPath = currPath.split(path.sep).slice(0, -1).join(path.sep);
-    }
-  }
-
-  if (!fileFound) {
-    throw new Error(
-      `Could not find a ${FLAGS_FILENAME} in CWD or any parent dir. See README.md for more info.`
-    );
-  }
-
-  return path.join(currPath, CONFIG_DIRECTORY);
+  return { jsExists, tsExists };
 }
 
 /** Gets the file paths for flags and environments based on the config path */
@@ -66,26 +50,10 @@ export function getFilePaths(configPath: string): {
   };
 }
 
-/** Verifies that only one type definition file exists */
-export async function checkTypedefs({
-  typeDefPathJavascript,
-  typeDefPathTypescript,
-}: {
-  typeDefPathJavascript: string;
-  typeDefPathTypescript: string;
-}): Promise<{ jsExists: boolean; tsExists: boolean }> {
-  const [jsExists, tsExists] = await Promise.all([
-    fsx.pathExists(typeDefPathJavascript),
-    fsx.pathExists(typeDefPathTypescript),
-  ]);
-
-  return { jsExists, tsExists };
-}
-
 /** Loads environments configuration from the given file path. */
 export async function loadEnvironments(environmentsFilepath: string): Promise<Environments> {
   try {
-    return await fsx.readJson(environmentsFilepath);
+    return await readJson(environmentsFilepath);
   } catch (e) {
     console.log(e);
     throw new Error(`Failed to load JSON from ${environmentsFilepath}. Probably not valid JSON!`);
@@ -95,11 +63,42 @@ export async function loadEnvironments(environmentsFilepath: string): Promise<En
 /** Loads flags state from the given file path. */
 export async function loadFlags(flagsFilepath: string): Promise<FlagsState> {
   try {
-    return await fsx.readJson(flagsFilepath);
+    return await readJson(flagsFilepath);
   } catch (e) {
     console.log(e);
     throw new Error(`Failed to load JSON from ${flagsFilepath}. Probably not valid JSON!`);
   }
+}
+
+/** Logs debug information if debugging is enabled */
+export function log(...args: unknown[]): void {
+  if (ENABLE_DEBUG_LOGGING) {
+    console.log(...args);
+  }
+}
+
+/** Resolves the configuration path by walking up directories until a flags.json file is found. */
+export async function resolveConfigPath(): Promise<string> {
+  const { base, dir, root } = path.parse(process.cwd());
+  let fileFound = false;
+  let currPath = path.join(dir, base);
+
+  while (!fileFound && currPath && currPath !== root) {
+    // eslint-disable-next-line no-await-in-loop
+    fileFound = await pathExists(path.join(currPath, CONFIG_DIRECTORY, FLAGS_FILENAME));
+
+    if (!fileFound) {
+      currPath = currPath.split(path.sep).slice(0, -1).join(path.sep);
+    }
+  }
+
+  if (!fileFound) {
+    throw new Error(
+      `Could not find a ${FLAGS_FILENAME} in CWD or any parent dir. See README.md for more info.`
+    );
+  }
+
+  return path.join(currPath, CONFIG_DIRECTORY);
 }
 
 /** Saves environments to the given file path */
@@ -108,7 +107,7 @@ export async function saveEnvironments(
   environments: Environments
 ): Promise<void> {
   log('writing file', { filepath: environmentsFilepath, state: environments });
-  return fsx.writeJson(environmentsFilepath, environments, { spaces: 2 });
+  return writeJson(environmentsFilepath, environments, { spaces: 2 });
 }
 
 /** Saves flags state to the given file path */
@@ -118,11 +117,11 @@ export async function saveFlags(flagsFilepath: string, flagsState: FlagsState): 
   const flagOutput = Object.keys(flagsState)
     .sort()
     .reduce<FlagsState>((output, flagName) => {
-      output[flagName] = flagsState[flagName]; // eslint-disable-line no-param-reassign
+      output[flagName] = flagsState[flagName];
       return output;
     }, {});
 
-  return fsx.writeJson(flagsFilepath, flagOutput, { spaces: 2 });
+  return writeJson(flagsFilepath, flagOutput, { spaces: 2 });
 }
 
 /** Writes type definitions for the flags */
@@ -144,5 +143,5 @@ export type Features = {
 `;
 
   log('writing typedef file', { filepath: typeDefPath, state: flagsState });
-  return fsx.writeFile(typeDefPath, fileContent);
+  return writeFile(typeDefPath, fileContent);
 }

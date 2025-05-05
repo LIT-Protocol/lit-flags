@@ -1,4 +1,4 @@
-import { selectExistingFlagPrompt, runPrompt } from '../prompts';
+import { runPrompt, selectExistingFlagPrompt } from '../prompts';
 
 export async function getExistingFlag(
   flagNames: string[],

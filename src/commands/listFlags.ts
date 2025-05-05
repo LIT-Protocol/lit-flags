@@ -1,3 +1,4 @@
+// eslint-disable-next-line import-x/no-named-as-default
 import Table from 'cli-table3';
 
 import { EnvironmentEntry, Environments, FlagsState } from '../types';

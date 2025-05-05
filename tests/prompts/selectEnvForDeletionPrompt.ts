@@ -1,14 +1,14 @@
-// selectEnvForDeletion.test.ts
-import { render } from '@inquirer/testing';
 import { select } from '@inquirer/prompts';
+import { render } from '@inquirer/testing';
+
 import { selectEnvForDeletionPrompt } from '../../src/prompts';
-import { pressEnter, navigateToOption } from './utils';
+import { navigateToOption, pressEnter } from './utils';
 
 describe('selectEnvForDeletionPrompt', () => {
   const environments = {
     DEV: 'development',
-    STAGING: 'staging',
     PROD: 'production',
+    STAGING: 'staging',
   };
 
   it('should display all available environments for selection', async () => {
@@ -22,7 +22,7 @@ describe('selectEnvForDeletionPrompt', () => {
     expect(getScreen()).toContain('Select the environment you wish to modify');
 
     // Verify all environment names are displayed
-    for (const [key, value] of Object.entries(environments)) {
+    for (const [key] of Object.entries(environments)) {
       expect(getScreen()).toContain(key);
     }
 

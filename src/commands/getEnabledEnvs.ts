@@ -1,6 +1,6 @@
-import { selectEnabledEnvsPrompt, runPrompt } from '../prompts';
-
 import type { Environments, FlagEntry } from '../types';
+
+import { runPrompt, selectEnabledEnvsPrompt } from '../prompts';
 
 export async function getEnabledEnvs(
   {

@@ -1,8 +1,8 @@
-import { selectSourceEnvPrompt, getNewEnvNamePrompt, runPrompt } from '../prompts';
+import { getNewEnvNamePrompt, runPrompt, selectSourceEnvPrompt } from '../prompts';
 
 interface NewEnvironmentSetup {
   environmentName: string;
-  sourceEnvironment: string | null;
+  sourceEnvironment: null | string;
 }
 
 export async function createNewEnv(

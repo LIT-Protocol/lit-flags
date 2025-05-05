@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Prompt } from './types';
 
 export function createPrompt<T, ConfigArgs extends any[] = any[]>(promptObj: {

@@ -6,7 +6,7 @@
  */
 export function isValidScreamingSnakeCase(
   value: string
-): { errorMessage?: never; isValid: true } | { errorMessage: string; isValid: false } {
+): { errorMessage: string; isValid: false } | { errorMessage?: never; isValid: true } {
   // Check if the value is in SCREAMING_SNAKE_CASE format
   // Only uppercase letters, numbers, and underscores allowed
   // Must start with a letter (not a number)
@@ -26,7 +26,7 @@ export function isValidScreamingSnakeCase(
     const testObj = {};
     Object.defineProperty(testObj, value, { value: true });
     return { isValid: true };
-  } catch (error) {
+  } catch {
     return {
       errorMessage: `"${value}" is not a valid property name`,
       isValid: false,

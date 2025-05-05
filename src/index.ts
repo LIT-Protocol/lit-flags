@@ -1,11 +1,11 @@
-import { Environments, FlagsState, FlagEntry, EnvironmentEntry } from './types';
+import { EnvironmentEntry, Environments, FlagEntry, FlagsState } from './types';
 
 /** Options for initializing feature flags */
 interface GetFeatureFlagsOptions {
-  /** Environment variable name to read for current environment */
-  envVarName: string;
   /** Map of environment keys to environment names */
   environments: Environments;
+  /** Environment variable name to read for current environment */
+  envVarName: string;
   /** The feature flag state object */
   flagState: FlagsState;
 }

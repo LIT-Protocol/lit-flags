@@ -1,8 +1,8 @@
-// selectSourceEnv.test.ts
-import { render } from '@inquirer/testing';
 import { select } from '@inquirer/prompts';
+import { render } from '@inquirer/testing';
+
 import { selectSourceEnvPrompt } from '../../src/prompts';
-import { pressEnter, navigateToOption } from './utils';
+import { navigateToOption, pressEnter } from './utils';
 
 describe('selectSourceEnvPrompt', () => {
   const existingEnvironments = ['DEV', 'STAGING', 'PROD'];
@@ -35,7 +35,7 @@ describe('selectSourceEnvPrompt', () => {
     // Test selecting each environment in the list
     for (let i = 0; i < existingEnvironments.length; i++) {
       const config = selectSourceEnvPrompt.getConfig(existingEnvironments);
-      const { answer, events, getScreen } = await render(select, config);
+      const { answer, events } = await render(select, config);
 
       // Navigate to the environment at index i
       await navigateToOption(events, i);

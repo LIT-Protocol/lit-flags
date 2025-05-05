@@ -8,8 +8,8 @@
       "lastEditedBy": "Daryl Collins"
     },
     "DEVELOPMENT": {
-      "enabled": false,
-      "lastEditedAt": "2025-05-05T06:03:22.621Z",
+      "enabled": true,
+      "lastEditedAt": "2025-05-05T22:25:45.389Z",
       "lastEditedBy": "Daryl Collins"
     },
     "PROD": {
@@ -27,8 +27,8 @@
       "lastEditedBy": "Daryl Collins"
     },
     "DEVELOPMENT": {
-      "enabled": true,
-      "lastEditedAt": "2025-05-05T05:58:03.241Z",
+      "enabled": false,
+      "lastEditedAt": "2025-05-05T22:26:14.639Z",
       "lastEditedBy": "Daryl Collins"
     },
     "PROD": {

@@ -1,14 +1,15 @@
 {
-  "extends": ["@tsconfig/node20/tsconfig.json"],
+  "extends": "@tsconfig/node20/tsconfig.json",
   "strictNullChecks": true,
   "allowJs": true,
   "checkJs": false,
-  "include": ["wat.ts", "./src/*", "./src/bin/flag-editor.ts"],
-  "exclude": ["*.js", "*.d.ts"],
+  "include": ["./src/**/*", "./tests/**/*"],
+  "exclude": ["node_modules", "dist"],
   "compilerOptions": {
     "resolveJsonModule": true,
     "module": "nodenext",
     "strict": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "useUnknownInCatchVariables": true
   }
 }

@@ -1,14 +1,14 @@
-// selectEnabledEnvs.test.ts
-import { render } from '@inquirer/testing';
 import { checkbox } from '@inquirer/prompts';
+import { render } from '@inquirer/testing';
+
 import { selectEnabledEnvsPrompt } from '../../src/prompts';
-import { pressEnter, navigateToOption } from './utils';
+import { pressEnter } from './utils';
 
 describe('selectEnabledEnvsPrompt', () => {
   const environments = {
     DEV: 'development',
-    STAGING: 'staging',
     PROD: 'production',
+    STAGING: 'staging',
   };
 
   // Create a properly formatted flag entry with all required properties
@@ -58,8 +58,8 @@ describe('selectEnabledEnvsPrompt', () => {
     // Create a flag entry with some environments enabled
     const flagEntry = createFlagEntry({
       [environments.DEV]: { enabled: true },
-      [environments.STAGING]: { enabled: false },
       [environments.PROD]: { enabled: true },
+      [environments.STAGING]: { enabled: false },
     });
 
     // Get the config for the prompt with the flag entry
@@ -69,7 +69,7 @@ describe('selectEnabledEnvsPrompt', () => {
     });
 
     // Render the prompt
-    const { answer, events, getScreen } = await render(checkbox, config);
+    const { answer, events } = await render(checkbox, config);
 
     // Submit without changing any selections
     await pressEnter(events);
@@ -82,8 +82,8 @@ describe('selectEnabledEnvsPrompt', () => {
     // Create a flag entry with some environments enabled
     const flagEntry = createFlagEntry({
       [environments.DEV]: { enabled: true },
-      [environments.STAGING]: { enabled: false },
       [environments.PROD]: { enabled: true },
+      [environments.STAGING]: { enabled: false },
     });
 
     // Get the config for the prompt with the flag entry
@@ -93,7 +93,7 @@ describe('selectEnabledEnvsPrompt', () => {
     });
 
     // Render the prompt
-    const { answer, events, getScreen } = await render(checkbox, config);
+    const { answer, events } = await render(checkbox, config);
 
     // Toggle the first environment (DEV) off
     events.keypress('space');

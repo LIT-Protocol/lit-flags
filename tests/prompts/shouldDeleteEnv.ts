@@ -1,6 +1,6 @@
-// shouldDeleteEnv.test.ts
-import { render } from '@inquirer/testing';
 import { confirm } from '@inquirer/prompts';
+import { render } from '@inquirer/testing';
+
 import { shouldDeleteEnvPrompt } from '../../src/prompts';
 import { pressEnter } from './utils';
 

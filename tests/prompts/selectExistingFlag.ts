@@ -1,8 +1,8 @@
-// selectExistingFlag.test.ts
-import { render } from '@inquirer/testing';
 import { select } from '@inquirer/prompts';
+import { render } from '@inquirer/testing';
+
 import { selectExistingFlagPrompt } from '../../src/prompts';
-import { pressEnter, navigateToOption } from './utils';
+import { navigateToOption, pressEnter } from './utils';
 
 describe('selectExistingFlagPrompt', () => {
   const flagNames = ['FIRST_FLAG', 'SECOND_FLAG', 'THIRD_FLAG'];
@@ -35,7 +35,7 @@ describe('selectExistingFlagPrompt', () => {
     // Test selecting each flag in the list
     for (let i = 0; i < flagNames.length; i++) {
       const config = selectExistingFlagPrompt.getConfig(flagNames);
-      const { answer, events, getScreen } = await render(select, config);
+      const { answer, events } = await render(select, config);
 
       // Navigate to the flag at index i
       await navigateToOption(events, i);

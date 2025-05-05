@@ -1,8 +1,8 @@
 import { checkbox } from '@inquirer/prompts';
 
-import { createPrompt } from './utils';
-
 import type { Environments, FlagEntry } from '../types';
+
+import { createPrompt } from './utils';
 
 export const selectEnabledEnvsPrompt = createPrompt<
   string[],
@@ -15,11 +15,18 @@ export const selectEnabledEnvsPrompt = createPrompt<
     environments: Environments;
     flagEntry?: FlagEntry;
   }) => {
-    const choices = Object.values(environments).map((name) => ({
-      name,
-      checked: !!(flagEntry?.[name] as any)?.enabled || false,
-      value: name,
-    }));
+    const choices = Object.values(environments).map((name) => {
+      let checked = false;
+      if (typeof flagEntry?.[name] !== 'string' && flagEntry?.[name].enabled) {
+        checked = true;
+      }
+
+      return {
+        checked,
+        name,
+        value: name,
+      };
+    });
 
     return {
       choices,

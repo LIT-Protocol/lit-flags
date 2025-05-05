@@ -1,8 +1,8 @@
-// getNewEnvName.test.ts
-import { render } from '@inquirer/testing';
 import { input } from '@inquirer/prompts';
+import { render } from '@inquirer/testing';
+
 import { getNewEnvNamePrompt } from '../../src/prompts';
-import { pressEnter, clearInput } from './utils';
+import { clearInput, pressEnter } from './utils';
 
 describe('getNewEnvNamePrompt', () => {
   const existingEnvironments = ['DEV', 'STAGING', 'PROD'];

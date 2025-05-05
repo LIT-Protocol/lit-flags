@@ -1,9 +1,9 @@
-// selectActionPrompt.test.ts
-import { render } from '@inquirer/testing';
 import { select } from '@inquirer/prompts';
-import { selectActionPrompt } from '../../src/prompts';
-import { pressEnter, navigateToOption } from './utils';
+import { render } from '@inquirer/testing';
+
 import { FLAGS_EXIST_CHOICES, NO_FLAGS_CHOICES } from '../../src/constants';
+import { selectActionPrompt } from '../../src/prompts';
+import { navigateToOption, pressEnter } from './utils';
 
 describe('selectActionPrompt', () => {
   it('should display choices for when flags exist', async () => {
@@ -62,7 +62,7 @@ describe('selectActionPrompt', () => {
     // Test selecting each option in the list
     for (let i = 0; i < FLAGS_EXIST_CHOICES.length; i++) {
       const config = selectActionPrompt.getConfig(hasFlags);
-      const { answer, events, getScreen } = await render(select, config);
+      const { answer, events } = await render(select, config);
 
       // Navigate to the option at index i
       await navigateToOption(events, i);
@@ -79,7 +79,7 @@ describe('selectActionPrompt', () => {
     // Test selecting each option in the list
     for (let i = 0; i < NO_FLAGS_CHOICES.length; i++) {
       const config = selectActionPrompt.getConfig(hasFlags);
-      const { answer, events, getScreen } = await render(select, config);
+      const { answer, events } = await render(select, config);
 
       // Navigate to the option at index i
       await navigateToOption(events, i);

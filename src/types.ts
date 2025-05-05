@@ -1,13 +1,19 @@
-// Map of environment keys to environment names
-export type Environments = Record<string, string>;
+// Options for adding a new environment
+export interface AddEnvironmentOptions {
+  environmentName: string;
+  sourceEnvironment: null | string;
+  userEditing: null | string;
+}
 
 // Entry for a specific environment
 export interface EnvironmentEntry {
-  [key: string]: any;
   enabled: boolean;
   lastEditedAt: string;
   lastEditedBy: string;
 }
+
+// Map of environment keys to environment names
+export type Environments = Record<string, string>;
 
 // Entry for a feature flag with its state across environments
 export interface FlagEntry {
@@ -16,21 +22,14 @@ export interface FlagEntry {
   createdBy: string;
 }
 
-// Map of flag names to their entries
-export interface FlagsState {
-  [flagName: string]: FlagEntry;
-}
-
 // Options for creating or updating a flag entry
 export interface FlagEntryOptions {
   environmentsEnabledIn: string[];
   flagEntry?: FlagEntry;
-  userEditing: string | null;
+  userEditing: null | string;
 }
 
-// Options for adding a new environment
-export interface AddEnvironmentOptions {
-  environmentName: string;
-  sourceEnvironment: string | null;
-  userEditing: string | null;
+// Map of flag names to their entries
+export interface FlagsState {
+  [flagName: string]: FlagEntry;
 }

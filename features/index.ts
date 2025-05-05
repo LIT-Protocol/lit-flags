@@ -1,4 +1,3 @@
-// @ts-expect-error This is an example file.
 import { getFeatureFlags } from '@lit-protocol/flags';
 
 import Environments from './environments.json';

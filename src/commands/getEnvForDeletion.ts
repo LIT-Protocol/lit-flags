@@ -1,6 +1,6 @@
-import { selectEnvForDeletionPrompt, shouldDeleteEnvPrompt, runPrompt } from '../prompts';
-
 import type { Environments } from '../types';
+
+import { runPrompt, selectEnvForDeletionPrompt, shouldDeleteEnvPrompt } from '../prompts';
 
 export async function getEnvForDeletion(
   environments: Environments,
@@ -11,7 +11,7 @@ export async function getEnvForDeletion(
     selectEnvForDeletion?: typeof selectEnvForDeletionPrompt;
     shouldDeleteEnv?: typeof shouldDeleteEnvPrompt;
   } = {}
-): Promise<string | null> {
+): Promise<null | string> {
   const proceed = await runPrompt(shouldDeleteEnv);
 
   if (!proceed) {

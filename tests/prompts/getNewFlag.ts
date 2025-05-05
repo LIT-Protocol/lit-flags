@@ -1,8 +1,8 @@
-// getNewFlag.test.ts
-import { render } from '@inquirer/testing';
 import { input } from '@inquirer/prompts';
+import { render } from '@inquirer/testing';
+
 import { getNewFlagNamePrompt } from '../../src/prompts';
-import { pressEnter, clearInput } from './utils';
+import { clearInput, pressEnter } from './utils';
 
 describe('getNewFlagNamePrompt', () => {
   const existingFlagNames = ['EXISTING_FLAG', 'ANOTHER_FLAG'];

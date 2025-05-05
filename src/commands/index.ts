@@ -9,9 +9,9 @@ import { listFlags } from './listFlags';
 export {
   createNewEnv,
   getAction,
-  getNewFlagName,
   getEnabledEnvs,
   getEnvForDeletion,
   getExistingFlag,
+  getNewFlagName,
   listFlags,
 };

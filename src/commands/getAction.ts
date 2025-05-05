@@ -1,4 +1,4 @@
-import { selectActionPrompt, runPrompt } from '../prompts';
+import { runPrompt, selectActionPrompt } from '../prompts';
 
 export async function getAction(
   hasFlags: boolean,

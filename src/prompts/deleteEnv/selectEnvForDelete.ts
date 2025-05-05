@@ -1,14 +1,14 @@
 import { select } from '@inquirer/prompts';
 
-import { createPrompt } from '../utils';
-
 import type { Environments } from '../../types';
 
-export const selectEnvForDeletionPrompt = createPrompt({
-  getConfig: (environments: Environments) => {
+import { createPrompt } from '../utils';
+
+export const selectEnvForDeletionPrompt = createPrompt<string, [Environments]>({
+  getConfig: (environments) => {
     const environmentChoices = Object.entries(environments).map(([key, value]) => ({
-      value,
       name: key,
+      value,
     }));
 
     return {

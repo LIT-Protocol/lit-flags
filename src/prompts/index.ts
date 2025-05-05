@@ -9,14 +9,14 @@ import { selectExistingFlagPrompt } from './selectExistingFlag';
 import { createPrompt, runPrompt } from './utils';
 
 export {
-  selectEnvForDeletionPrompt,
-  shouldDeleteEnvPrompt,
-  getNewFlagNamePrompt,
+  createPrompt,
   getNewEnvNamePrompt,
-  selectSourceEnvPrompt,
+  getNewFlagNamePrompt,
+  runPrompt,
   selectActionPrompt,
   selectEnabledEnvsPrompt,
+  selectEnvForDeletionPrompt,
   selectExistingFlagPrompt,
-  createPrompt,
-  runPrompt,
+  selectSourceEnvPrompt,
+  shouldDeleteEnvPrompt,
 };

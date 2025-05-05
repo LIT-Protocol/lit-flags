@@ -1,7 +1,7 @@
 import { select } from '@inquirer/prompts';
 
-import { createPrompt } from './utils';
 import { FLAGS_EXIST_CHOICES, NO_FLAGS_CHOICES } from '../constants';
+import { createPrompt } from './utils';
 
 export const selectActionPrompt = createPrompt<string, [boolean]>({
   getConfig: (hasFlags: boolean) => ({
