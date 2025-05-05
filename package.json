@@ -31,9 +31,11 @@
     "prepublishOnly": "eslint && pnpm build",
     "flags": "bun ./src/bin/flag-editor.ts",
     "test": "jest",
-    "clean": "rm -Rf dist node_modules"
+    "clean": "rm -Rf dist node_modules",
+    "ci:publish": "pnpm publish -r"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.3",
     "@eslint/js": "^9.26.0",
     "@inquirer/prompts": "^7.5.0",
     "@inquirer/testing": "^2.1.46",
