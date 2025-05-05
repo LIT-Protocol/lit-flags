@@ -9,7 +9,12 @@ enabled per environment, allowing finer granularity on how the functionality is 
 
 # Getting started
 
-Modifying feature flags is done by running using your package manage to execute it -- e.g. `pnpx @lit-protocol/flags`.
+Modifying feature flags is done by running `lit-flags using your package manager
+
+```zsh
+pnpm add @lit-protocol/flags
+pnpm lit-flags
+```
 
 Running the flag tool prompts the user for the intended action, currently one of:
 
@@ -17,10 +22,10 @@ Running the flag tool prompts the user for the intended action, currently one of
 - Modifying an existing feature flag to be enabled or disabled in the desired environments.
 - Deleting an existing feature flag.
 
-Running the `@lit-protocol/flags` tool requires a `features/` directory along the current path, the closest of
-which will be used by the binary.
+Running the `@lit-protocol/flags` tool requires a `features/` directory along the current path, the
+closest of which will be used by the binary.
 
-## NOTE: `lit-flag` is responsible for both generating and modifying files in this directory, so it is crucial that no changes are made to this directory's contents outside the `@lit-protocol/flags` tool once configured.
+## NOTE: `lit-flags` is responsible for both generating and modifying files in this directory, so it is crucial that no changes are made to this directory's contents outside the `@lit-protocol/flags` tool once configured.
 
 # Using Feature Flags
 
@@ -34,7 +39,7 @@ the project root) with the following files:
 - `features.js`: Module responsible for initializing and exporting the feature flags for use in the
   target project.
 
-The `features.js` module is responsible for initializing the proxy object via the `initFeatureFlags`
+The `features.js` module is responsible for initializing the proxy object via the `getFeatureFlags`
 method exported from this package. This method requires three parameters:
 
 - `currentEnvironment`: The environment against which flags should be validated. The provided value
@@ -42,7 +47,7 @@ method exported from this package. This method requires three parameters:
 - `environments`: The set of valid environments, specified in `environments.json`.
 - `flagState`: The set of defined feature flags, specified in `flags.json`.
 
-Once configured, the proxy object returned from `initFeatureFlags` is used to check the state of a
+Once configured, the proxy object returned from `getFeatureFlags` is used to check the state of a
 feature by referring to the flag name, e.g. `const isFeatureXEnabled = Features.FEATURE_X`. The
 proxy object will throw an exception if the flag does not exist.
 
@@ -71,14 +76,14 @@ depending on your project, you may need a different `features.js` file.
 #### features/features.js
 
 ```js
-const { initFeatureFlags } = require('@lit-protocol/flags');
+const { getFeatureFlags } = require('@lit-protocol/flags');
 
 const Environments = require('./environments.json');
 const Flags = require('./flags.json');
 
 const envVarName = 'LIT_FEATURE_ENV';
 
-const Features = initFeatureFlags({
+const Features = getFeatureFlags({
   envVarName,
   environments: Environments,
   flagState: Flags,

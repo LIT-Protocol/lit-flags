@@ -1,7 +1,7 @@
 import { Environments, FlagsState, FlagEntry, EnvironmentEntry } from './types';
 
 /** Options for initializing feature flags */
-interface InitFeatureFlagsOptions {
+interface GetFeatureFlagsOptions {
   /** Environment variable name to read for current environment */
   envVarName: string;
   /** Map of environment keys to environment names */
@@ -17,11 +17,11 @@ interface InitFeatureFlagsOptions {
  * @returns A proxy that provides boolean values for each flag based on the current environment
  * @throws Error if the environment or flagState is invalid
  */
-function initFeatureFlags({
+function getFeatureFlags({
   environments,
   envVarName,
   flagState,
-}: InitFeatureFlagsOptions): Record<string, boolean> {
+}: GetFeatureFlagsOptions): Record<string, boolean> {
   const currentEnvironment = process.env[envVarName];
 
   if (typeof flagState !== 'object') {
@@ -58,4 +58,4 @@ function initFeatureFlags({
   }) as unknown as Record<string, boolean>;
 }
 
-export { initFeatureFlags };
+export {};
