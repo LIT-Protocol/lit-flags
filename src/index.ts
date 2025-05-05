@@ -58,4 +58,4 @@ function getFeatureFlags({
   }) as unknown as Record<string, boolean>;
 }
 
-export {};
+export { getFeatureFlags };

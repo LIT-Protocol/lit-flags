@@ -36,10 +36,10 @@ the project root) with the following files:
   `"ENV_NAME": "env_value"`.
 - `flags.json`: The set of flags enabled per environment. During initial configuration this should
   be an empty JSON file.
-- `features.js`: Module responsible for initializing and exporting the feature flags for use in the
+- `features.ts`: Module responsible for initializing and exporting the feature flags for use in the
   target project.
 
-The `features.js` module is responsible for initializing the proxy object via the `getFeatureFlags`
+The `features.ts` module is responsible for initializing the proxy object via the `getFeatureFlags`
 method exported from this package. This method requires three parameters:
 
 - `currentEnvironment`: The environment against which flags should be validated. The provided value
@@ -50,6 +50,16 @@ method exported from this package. This method requires three parameters:
 Once configured, the proxy object returned from `getFeatureFlags` is used to check the state of a
 feature by referring to the flag name, e.g. `const isFeatureXEnabled = Features.FEATURE_X`. The
 proxy object will throw an exception if the flag does not exist.
+
+## Typescript vs. JS Projects
+
+The default configuration for this tool assumes you are using a Typescript project. It emits a
+`features.ts` file every time you work with feature flags, which ensures you have type-safe access
+to your feature.
+
+If you are working in a plain Javascript project, you can still get type-safe references to your
+flags! Just pass `--jsCompat` to the `lit-flags` editor tool, which will cause it to emit a
+`features.d.ts` file instead.
 
 # Examples
 
@@ -75,11 +85,12 @@ depending on your project, you may need a different `features.js` file.
 
 #### features/features.js
 
-```js
-const { getFeatureFlags } = require('@lit-protocol/flags');
+```ts
+import { getFeatureFlags } from '@lit-protocol/flags';
 
-const Environments = require('./environments.json');
-const Flags = require('./flags.json');
+import Environments from './environments.json';
+import Flags from './flags.json';
+import type { Features } from './features';
 
 const envVarName = 'LIT_FEATURE_ENV';
 
@@ -87,9 +98,7 @@ const Features = getFeatureFlags({
   envVarName,
   environments: Environments,
   flagState: Flags,
-});
+}) as Features;
 
-module.exports = {
-  Features,
-};
+export { Features };
 ```

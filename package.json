@@ -38,6 +38,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.11.30",
+    "@types/yargs": "^17.0.33",
     "@typescript-eslint/eslint-plugin": "^7.3.1",
     "@typescript-eslint/parser": "^7.3.1",
     "bun": "^1.2.12",
@@ -61,7 +62,8 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.4.3",
     "typescript-eslint": "^8.29.0",
-    "unbuild": "^3.5.0"
+    "unbuild": "^3.5.0",
+    "yargs": "^17.7.2"
   },
   "unbuild": {
     "failOnWarn": false

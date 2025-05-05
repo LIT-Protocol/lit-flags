@@ -1,1 +1,40 @@
-{}
+{
+  "EXAMPLE_FLAG": {
+    "createdAt": "2025-05-05T05:57:35.931Z",
+    "createdBy": "Daryl Collins",
+    "LOCALDEV": {
+      "enabled": true,
+      "lastEditedAt": "2025-05-05T05:57:35.931Z",
+      "lastEditedBy": "Daryl Collins"
+    },
+    "DEVELOPMENT": {
+      "enabled": true,
+      "lastEditedAt": "2025-05-05T05:58:03.241Z",
+      "lastEditedBy": "Daryl Collins"
+    },
+    "PROD": {
+      "enabled": true,
+      "lastEditedAt": "2025-05-05T05:58:19.796Z",
+      "lastEditedBy": "Daryl Collins"
+    }
+  },
+  "OTHER_EXAMPLE_FLAG": {
+    "createdAt": "2025-05-05T05:58:48.545Z",
+    "createdBy": "Daryl Collins",
+    "LOCALDEV": {
+      "enabled": true,
+      "lastEditedAt": "2025-05-05T05:58:48.545Z",
+      "lastEditedBy": "Daryl Collins"
+    },
+    "DEVELOPMENT": {
+      "enabled": true,
+      "lastEditedAt": "2025-05-05T05:58:48.545Z",
+      "lastEditedBy": "Daryl Collins"
+    },
+    "PROD": {
+      "enabled": false,
+      "lastEditedAt": "2025-05-05T05:58:48.545Z",
+      "lastEditedBy": "Daryl Collins"
+    }
+  }
+}

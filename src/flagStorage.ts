@@ -7,7 +7,8 @@ import { Environments, FlagsState } from './types';
 
 const CONFIG_DIRECTORY = 'features';
 const FLAGS_FILENAME = 'flags.json';
-const FEATURES_TYPEDEF_FILENAME = 'features.d.ts';
+const FEATURES_TYPEDEF_FILENAME_JS_COMPAT = 'features.d.ts';
+const FEATURES_TYPEDEF_FILENAME = 'features.ts';
 const ENVIRONMENTS_FILENAME = 'environments.json';
 const ENABLE_DEBUG_LOGGING = process.env.LIT_FLAG_DEBUG === 'true' || false;
 
@@ -26,7 +27,7 @@ export async function resolveConfigPath(): Promise<string> {
 
   while (!fileFound && currPath && currPath !== root) {
     // eslint-disable-next-line no-await-in-loop
-    fileFound = await fsx.exists(path.join(currPath, CONFIG_DIRECTORY, FLAGS_FILENAME));
+    fileFound = await fsx.pathExists(path.join(currPath, CONFIG_DIRECTORY, FLAGS_FILENAME));
 
     if (!fileFound) {
       currPath = currPath.split(path.sep).slice(0, -1).join(path.sep);
@@ -46,17 +47,39 @@ export async function resolveConfigPath(): Promise<string> {
 export function getFilePaths(configPath: string): {
   environmentsFilepath: string;
   flagsFilepath: string;
-  typeDefPath: string;
+  typeDefPathJavascript: string;
+  typeDefPathTypescript: string;
 } {
   const environmentsFilepath = path.join(configPath, ENVIRONMENTS_FILENAME);
   const flagsFilepath = path.join(configPath, FLAGS_FILENAME);
-  const typeDefPath = flagsFilepath.replace(FLAGS_FILENAME, FEATURES_TYPEDEF_FILENAME);
+  const typeDefPathTypescript = flagsFilepath.replace(FLAGS_FILENAME, FEATURES_TYPEDEF_FILENAME);
+  const typeDefPathJavascript = flagsFilepath.replace(
+    FLAGS_FILENAME,
+    FEATURES_TYPEDEF_FILENAME_JS_COMPAT
+  );
 
   return {
     environmentsFilepath,
     flagsFilepath,
-    typeDefPath,
+    typeDefPathJavascript,
+    typeDefPathTypescript,
   };
+}
+
+/** Verifies that only one type definition file exists */
+export async function checkTypedefs({
+  typeDefPathJavascript,
+  typeDefPathTypescript,
+}: {
+  typeDefPathJavascript: string;
+  typeDefPathTypescript: string;
+}): Promise<{ jsExists: boolean; tsExists: boolean }> {
+  const [jsExists, tsExists] = await Promise.all([
+    fsx.pathExists(typeDefPathJavascript),
+    fsx.pathExists(typeDefPathTypescript),
+  ]);
+
+  return { jsExists, tsExists };
 }
 
 /** Loads environments configuration from the given file path. */

@@ -1,1 +1,5 @@
-{}
+{
+  "LOCALDEV": "LOCALDEV",
+  "DEVELOPMENT": "DEVELOPMENT",
+  "PROD": "PROD"
+}

@@ -1,6 +1,7 @@
 import * as commands from './commands';
 import { FlagEditor } from './FlagEditor';
 import * as flagStorage from './flagStorage';
+import { checkTypedefs } from './flagStorage';
 import getGitUsername from './gitTools/git-user-name';
 
 /**
@@ -9,16 +10,34 @@ import getGitUsername from './gitTools/git-user-name';
  *
  * @returns A promise that resolves when the editing process is complete
  */
-export async function createEditorInstance(): Promise<void> {
+export async function createEditorInstance(isTypescript: boolean): Promise<void> {
   // Get user editing information
   const userEditing = await getGitUsername();
 
   // Resolve paths and load data
   const configPath = await flagStorage.resolveConfigPath();
-  const { environmentsFilepath, flagsFilepath, typeDefPath } = flagStorage.getFilePaths(configPath);
+  const { environmentsFilepath, flagsFilepath, typeDefPathJavascript, typeDefPathTypescript } =
+    flagStorage.getFilePaths(configPath);
 
   const environments = await flagStorage.loadEnvironments(environmentsFilepath);
   const flagsState = await flagStorage.loadFlags(flagsFilepath);
+
+  const { jsExists, tsExists } = await checkTypedefs({
+    typeDefPathJavascript,
+    typeDefPathTypescript,
+  });
+
+  if (isTypescript && jsExists) {
+    console.error(
+      'There must not be a .d.ts type definition file unless you are using jsCompat mode'
+    );
+    throw new Error('.d.ts type definition files are not allowed in typescript mode');
+  }
+
+  if (!isTypescript && tsExists) {
+    console.error('There must not be a .ts type definition file when you are using jsCompat mode');
+    throw new Error('.ts type definition files are not allowed in jsCompat mode');
+  }
 
   // Create editor instance directly with constructor
   const editor = new FlagEditor({
@@ -34,5 +53,8 @@ export async function createEditorInstance(): Promise<void> {
   // Save the results using storage module
   await flagStorage.saveEnvironments(environmentsFilepath, result.environments);
   await flagStorage.saveFlags(flagsFilepath, result.flagsState);
-  await flagStorage.writeTypeDefinitions(typeDefPath, result.flagsState);
+  await flagStorage.writeTypeDefinitions(
+    isTypescript ? typeDefPathTypescript : typeDefPathJavascript,
+    result.flagsState
+  );
 }

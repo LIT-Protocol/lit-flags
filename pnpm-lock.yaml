@@ -26,6 +26,9 @@ importers:
       '@types/node':
         specifier: ^20.11.30
         version: 20.17.32
+      '@types/yargs':
+        specifier: ^17.0.33
+        version: 17.0.33
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.3.1
         version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3)
@@ -98,6 +101,9 @@ importers:
       unbuild:
         specifier: ^3.5.0
         version: 3.5.0(typescript@5.8.3)
+      yargs:
+        specifier: ^17.7.2
+        version: 17.7.2
 
 packages:
 
