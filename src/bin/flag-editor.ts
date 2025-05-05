@@ -10,6 +10,7 @@ const { jsCompat } = yargs(process.argv.slice(2))
       type: 'boolean',
     },
   })
+  .version()
   .help()
   .parseSync();
 

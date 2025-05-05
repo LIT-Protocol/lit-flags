@@ -1,7 +1,23 @@
 # LIT Feature Flags
 
-This is a fork of [NEAR Wallet Feature Flags](@near-wallet/feature-flags) with modernization and
-other enhancements (no more global binary binstall)!
+This is a fork of
+[NEAR Wallet Feature Flags](https://www.npmjs.com/package/@near-wallet/feature-flags/v/0.1.0?activeTab=readme)
+with modernization and other enhancements.
+
+Primary differences from the @near-wallet/feature-flags are:
+
+- Re-written in Typescript; both `cjs` and `mjs` exports
+- CLI is bundled, which makes the package a zero dependency package! The imported interface is under
+  1kb uncompressed and unminified. :)
+- No longer requires `binstall` command
+  - You can run it directly using `pnpx @lit-protocol/flags` or after installing the package
+    `pnpm lit-flags`
+- Bugfixes around handling adding first environments and removing the last
+- Typescript-first emit support!
+  - Previously, a `.d.ts` file was emitted to type the JSON features file keys - now the default
+    behaviour is to emit a .ts file
+  - You can still use this with plain js codebases by running the editor with `--jsCompat` arg
+- Added `list` functionality that shows flags and their status per-env in a table
 
 Feature flags serve as code guards around functionality being implemented, enabling developers to
 iterate on more complex features while still being able to deploy small changes. Feature flags are
