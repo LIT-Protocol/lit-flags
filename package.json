@@ -35,7 +35,8 @@
     "flags": "bun ./src/bin/flag-editor.ts",
     "test": "jest",
     "clean": "rm -Rf dist node_modules",
-    "ci:publish": "pnpm publish -r"
+    "ci:publish": "pnpm publish -r",
+    "ci:version": "pnpm changeset version && pnpm changeset tag"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.1",
