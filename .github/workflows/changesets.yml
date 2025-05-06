@@ -32,9 +32,10 @@ jobs:
       - name: Create and publish versions
         uses: changesets/action@v1
         with:
+          version: pnpm ci:version
+          publish: pnpm ci:publish
           commit: "ci: update versions"
           title: "ci: update versions"
-          publish: pnpm ci:publish
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT_CI_CHECKS }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
