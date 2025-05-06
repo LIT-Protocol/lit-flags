@@ -1,4 +1,4 @@
-name: Changesets
+name: Changesets CI
 
 on:
   push:
@@ -10,10 +10,10 @@ env:
 
 jobs:
   version:
-    timeout-minutes: 15
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Setup pnpm
@@ -28,6 +28,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      # This runs lint and tsc --noEmit before any publishing happens
       - name: Create and publish versions
         uses: changesets/action@v1
         with:

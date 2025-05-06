@@ -83,6 +83,7 @@ export default [
     ...jestPlugin.configs['flat/recommended'],
     rules: {
       ...jestPlugin.configs['flat/recommended'].rules,
+      '@typescript-eslint/no-explicit-any': 'off',
       'no-await-in-loop': 'off',
     },
   },

@@ -7,8 +7,9 @@ import { pressEnter } from './utils';
 describe('selectEnabledEnvsPrompt', () => {
   const environments = {
     DEV: 'development',
-    PROD: 'production',
     STAGING: 'staging',
+    // eslint-disable-next-line perfectionist/sort-objects
+    PROD: 'production',
   };
 
   // Create a properly formatted flag entry with all required properties
