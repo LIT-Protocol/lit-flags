@@ -36,5 +36,5 @@ jobs:
           title: "ci: update versions"
           publish: pnpm ci:publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT_CI_CHECKS }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
