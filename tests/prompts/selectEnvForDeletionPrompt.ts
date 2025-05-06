@@ -7,8 +7,9 @@ import { navigateToOption, pressEnter } from './utils';
 describe('selectEnvForDeletionPrompt', () => {
   const environments = {
     DEV: 'development',
-    PROD: 'production',
     STAGING: 'staging',
+    // eslint-disable-next-line perfectionist/sort-objects
+    PROD: 'production',
   };
 
   it('should display all available environments for selection', async () => {
