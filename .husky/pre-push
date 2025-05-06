@@ -14,7 +14,7 @@ branch=$(git rev-parse --abbrev-ref HEAD)
 log_debug "Current branch: $branch"
 
 # ✅ Allowed branch name prefixes (enforced below)
-allowed_prefixes_regex="^(feature|bugfix|release)/"
+allowed_prefixes_regex="^(feature|bugfix|release|changeset-release)/"
 
 # ❌ Reject branch names that don't follow allowed prefixes
 if ! echo "$branch" | grep -Eq "$allowed_prefixes_regex"; then
