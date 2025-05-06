@@ -1,0 +1,25 @@
+{
+  "environments": {
+    "EXAMPLE_ENV": "EXAMPLE_ENV"
+  },
+  "features": {
+    "EXAMPLE_FLAG": {
+      "createdAt": "2025-05-06T04:16:52.709Z",
+      "createdBy": "Daryl Collins",
+      "EXAMPLE_ENV": {
+        "enabled": true,
+        "lastEditedAt": "2025-05-06T04:16:52.709Z",
+        "lastEditedBy": "Daryl Collins"
+      }
+    },
+    "OTHER_FLAG": {
+      "createdAt": "2025-05-06T04:17:05.642Z",
+      "createdBy": "Daryl Collins",
+      "EXAMPLE_ENV": {
+        "enabled": false,
+        "lastEditedAt": "2025-05-06T04:17:05.642Z",
+        "lastEditedBy": "Daryl Collins"
+      }
+    }
+  }
+}

@@ -1,13 +1,11 @@
-import { EnvironmentEntry, Environments, FlagEntry, FlagsState } from './types';
+import { EnvironmentEntry, FeatureState, FlagEntry } from './types';
 
 /** Options for initializing feature flags */
 interface GetFeatureFlagsOptions {
-  /** Map of environment keys to environment names */
-  environments: Environments;
-  /** Environment variable name to read for current environment */
+  /** Environment variable name to use to identify the current environment */
   envVarName: string;
   /** The feature flag state object */
-  flagState: FlagsState;
+  featureState: FeatureState;
 }
 
 /**
@@ -18,15 +16,16 @@ interface GetFeatureFlagsOptions {
  * @throws Error if the environment or flagState is invalid
  */
 function getFeatureFlags({
-  environments,
   envVarName,
-  flagState,
+  featureState,
 }: GetFeatureFlagsOptions): Record<string, boolean> {
   const currentEnvironment = process.env[envVarName];
 
-  if (typeof flagState !== 'object') {
+  if (typeof featureState !== 'object') {
     throw Error('invalid flags');
   }
+
+  const { environments, features } = featureState;
 
   if (!Object.values(environments).includes(currentEnvironment as string)) {
     throw Error(
@@ -36,7 +35,7 @@ function getFeatureFlags({
   }
 
   // Use type assertion to tell TypeScript this Proxy returns boolean values for any string key
-  return new Proxy(flagState, {
+  return new Proxy(features, {
     get(flags, flag) {
       if (flag === '__esModule') {
         return { value: true };
