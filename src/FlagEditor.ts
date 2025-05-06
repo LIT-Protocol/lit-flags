@@ -1,7 +1,6 @@
-// FlagEditor.ts
 import * as commandFuncs from './commands';
 import { ACTIONS, ACTIONS_REQUIRING_ENVIRONMENTS } from './constants';
-import * as flagStorage from './flagStorage';
+import { log } from './debugLogger';
 import {
   AddEnvironmentOptions,
   EnvironmentEntry,
@@ -72,7 +71,7 @@ export class FlagEditor {
   }
 
   flagEntry({ environmentsEnabledIn, flagEntry, userEditing }: FlagEntryOptions): FlagEntry {
-    flagStorage.log({ userEditing });
+    log({ userEditing });
 
     const perEnvEntries: Record<string, EnvironmentEntry> = {};
     Object.values(this.environments).forEach((name) => {
@@ -125,13 +124,13 @@ export class FlagEditor {
     environments: Environments;
     flagsState: FlagsState;
   }> {
-    flagStorage.log({ userEditing: this.userEditing });
+    log({ userEditing: this.userEditing });
 
     const flagNames = Object.keys(this.flagsState);
     const hasEnvironments = Object.keys(this.environments).length > 0;
 
     const action = await this.commands.getAction(flagNames.length !== 0);
-    flagStorage.log({ action });
+    log({ action });
 
     if (action.includes(ACTIONS.REMOVE_ENVIRONMENT) && !hasEnvironments) {
       console.log(`There are no environments to delete. You need to add an environment first.`);

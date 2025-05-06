@@ -5,6 +5,12 @@ export interface AddEnvironmentOptions {
   userEditing: null | string;
 }
 
+export type Config = {
+  CONFIG_PATH: string;
+  ENABLE_DEBUG_LOGGING: boolean;
+  JS_COMPATIBILITY: boolean;
+};
+
 // Entry for a specific environment
 export interface EnvironmentEntry {
   enabled: boolean;
@@ -14,6 +20,11 @@ export interface EnvironmentEntry {
 
 // Map of environment keys to environment names
 export type Environments = Record<string, string>;
+
+export interface FeatureState {
+  environments: Environments;
+  features: FlagsState;
+}
 
 // Entry for a feature flag with its state across environments
 export interface FlagEntry {

@@ -4,6 +4,7 @@ import { getEnabledEnvs } from './getEnabledEnvs';
 import { getEnvForDeletion } from './getEnvForDeletion';
 import { getExistingFlag } from './getExistingFlag';
 import { getNewFlagName } from './getNewFlagName';
+import { initFeatureState } from './initFeatureState';
 import { listFlags } from './listFlags';
 
 export {
@@ -13,5 +14,6 @@ export {
   getEnvForDeletion,
   getExistingFlag,
   getNewFlagName,
+  initFeatureState,
   listFlags,
 };

@@ -18,6 +18,10 @@ Primary differences from the @near-wallet/feature-flags are:
     behaviour is to emit a .ts file
   - You can still use this with plain js codebases by running the editor with `--jsCompat` arg
 - Added `list` functionality that shows flags and their status per-env in a table
+- Explicit command-line argument for target directory (no 'magic' discovery of target directory)
+- Simplified data model -- flag and environment state is stored in a single file
+- Quality of life improvements in the prompting model, and a new initialization prompt that helps
+  you get started without manually creating target json files.
 
 Feature flags serve as code guards around functionality being implemented, enabling developers to
 iterate on more complex features while still being able to deploy small changes. Feature flags are
@@ -29,92 +33,88 @@ Modifying feature flags is done by running `lit-flags using your package manager
 
 ```zsh
 pnpm add @lit-protocol/flags
-pnpm lit-flags
+pnpm lit-flags --configPath=<path_to_feature_state_dir>
 ```
 
-Running the flag tool prompts the user for the intended action, currently one of:
+It is strongly recommended that you create an empty directory to target the tool at. When run for
+the first time, you will be prompted to initialize the featureState.json file in the target
+directory and define your first environment.
 
-- Creating a new feature flag and setting the environments in which it should be enabled.
-- Modifying an existing feature flag to be enabled or disabled in the desired environments.
+On subsequent runs, you can...
+
+- Create a new feature flag and set the environments in which it should be enabled.
+- Modify the environments that an existing feature flag is enabled in
+- Define a new environment. You will be prompted for the environment to copy flag states from.
 - Deleting an existing feature flag.
+- Deleting an existing environment.
+- Displaying a list of all feature flags and their enabled status per environment in a table.
 
-Running the `@lit-protocol/flags` tool requires a `features/` directory along the current path, the
-closest of which will be used by the binary.
-
-## NOTE: `lit-flags` is responsible for both generating and modifying files in this directory, so it is crucial that no changes are made to this directory's contents outside the `@lit-protocol/flags` tool once configured.
+## NOTE: `lit-flags` writes additional helpful metadata to the featuresState.json file, and synchronizes a type file with the flags that you define. You should never edit the json state file or typedefs manually.
 
 # Using Feature Flags
 
-In order to use this package, a `features/` directory must be created at the appropriate level (e.g.
-the project root) with the following files:
+This tool will manage a featureState.json file, and create a types file that is designed to be used
+with the output from the `getFeatureFlags()` function of this package.
 
-- `environments.json`: The valid environments for the application, in the form of
-  `"ENV_NAME": "env_value"`.
-- `flags.json`: The set of flags enabled per environment. During initial configuration this should
-  be an empty JSON file.
-- `features.ts`: Module responsible for initializing and exporting the feature flags for use in the
-  target project.
+You will need to create a small shim file in your codebase that:
 
-The `features.ts` module is responsible for initializing the proxy object via the `getFeatureFlags`
-method exported from this package. This method requires three parameters:
-
-- `currentEnvironment`: The environment against which flags should be validated. The provided value
-  must be a valid value in `environments.json` or an exception will be thrown.
-- `environments`: The set of valid environments, specified in `environments.json`.
-- `flagState`: The set of defined feature flags, specified in `flags.json`.
-
-Once configured, the proxy object returned from `getFeatureFlags` is used to check the state of a
-feature by referring to the flag name, e.g. `const isFeatureXEnabled = Features.FEATURE_X`. The
-proxy object will throw an exception if the flag does not exist.
+1. Loads the flag state from the json file and passes it into the getFeatureFlags() function
+2. Identifies what environment your code is running from. This is typically done by loading it from
+   process.env variable. See below under 'Example Configuration'.
 
 ## Typescript vs. JS Projects
 
 The default configuration for this tool assumes you are using a Typescript project. It emits a
-`features.ts` file every time you work with feature flags, which ensures you have type-safe access
-to your feature.
+`features.ts` file for the proxy features object, which ensures you have type-safe access to your
+feature state.
 
 If you are working in a plain Javascript project, you can still get type-safe references to your
 flags! Just pass `--jsCompat` to the `lit-flags` editor tool, which will cause it to emit a
 `features.d.ts` file instead.
 
-# Examples
+# Example Configuration
 
 The following outlines initial example templates for the required files mentioned above. This code
-is required to correctly set up the `Features` proxy object for use in a project. Note that
-depending on your project, you may need a different `features.js` file.
+is required to correctly set up the `Features` proxy object for use in a project. Note that the
+exact content of this file will vary depending on your project configuration and tooling (e.g.
+loading json files may be done differently for you!).
 
-#### features/environments.json
+## features/features.js
 
-```json
-{
-  "LOCALDEV": "development",
-  "PREVIEW": "testnet",
-  "PRODUCTION": "mainnet"
-}
-```
-
-#### features/flags.json
-
-```json
-{}
-```
-
-#### features/features.js
+#### Typescript
 
 ```ts
 import { getFeatureFlags } from '@lit-protocol/flags';
 
-import Environments from './environments.json';
-import Flags from './flags.json';
+import Flags from './featureState.json';
 import type { Features } from './features';
 
 const envVarName = 'LIT_FEATURE_ENV';
 
 const Features = getFeatureFlags({
   envVarName,
-  environments: Environments,
-  flagState: Flags,
+  featureState: Flags,
 }) as Features;
 
 export { Features };
+```
+
+#### Javascript (use --jsCompat argument to get a .d.ts file for your types)
+
+```ts
+// This file _must_ be `features.js` so that the `.d.ts` file we generate in compat mode maps to this file's export!
+const { initFeatureFlags } = require('@lit-protocol/flags');
+
+import Flags from './featureState.json';
+
+const envVarName = 'LIT_FEATURE_ENV';
+
+const Features = getFeatureFlags({
+  envVarName,
+  featureState: Flags,
+});
+
+module.exports = {
+  Features,
+};
 ```

@@ -1,3 +1,4 @@
+import { confirmInitFeatureStatePrompt } from './confirmInitPrompt';
 import { selectEnvForDeletionPrompt } from './deleteEnv/selectEnvForDelete';
 import { shouldDeleteEnvPrompt } from './deleteEnv/shouldDeleteEnv';
 import { getNewFlagNamePrompt } from './getNewFlagName';
@@ -9,6 +10,7 @@ import { selectExistingFlagPrompt } from './selectExistingFlag';
 import { createPrompt, runPrompt } from './utils';
 
 export {
+  confirmInitFeatureStatePrompt,
   createPrompt,
   getNewEnvNamePrompt,
   getNewFlagNamePrompt,

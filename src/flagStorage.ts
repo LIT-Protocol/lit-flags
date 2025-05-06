@@ -1,15 +1,22 @@
 import { pathExists, readJson, writeFile, writeJson } from 'fs-extra';
-// flagStorage.ts
 import path from 'path';
 
-import { Environments, FlagsState } from './types';
+import { log } from './debugLogger';
+import { Config, FeatureState, FlagsState } from './types';
 
-const CONFIG_DIRECTORY = 'features';
-const FLAGS_FILENAME = 'flags.json';
-const FEATURES_TYPEDEF_FILENAME_JS_COMPAT = 'features.d.ts';
-const FEATURES_TYPEDEF_FILENAME = 'features.ts';
-const ENVIRONMENTS_FILENAME = 'environments.json';
-const ENABLE_DEBUG_LOGGING = process.env.LIT_FLAG_DEBUG === 'true' || false;
+/**
+ * Template tag function to generate filenames with different extensions Usage:
+ * fileExt`baseName`('extension')
+ */
+const fileExt =
+  (strings: TemplateStringsArray) =>
+  (ext: string): string =>
+    `${strings[0]}.${ext}`;
+
+const FILE_NAMES = {
+  FEATURE_STATE_FILENAME: 'featureState.json',
+  FEATURE_TYPES: fileExt`features`,
+};
 
 /** Verifies that only one type definition file exists */
 export async function checkTypedefs({
@@ -29,99 +36,51 @@ export async function checkTypedefs({
 
 /** Gets the file paths for flags and environments based on the config path */
 export function getFilePaths(configPath: string): {
-  environmentsFilepath: string;
-  flagsFilepath: string;
+  featureStateFilepath: string;
   typeDefPathJavascript: string;
   typeDefPathTypescript: string;
 } {
-  const environmentsFilepath = path.join(configPath, ENVIRONMENTS_FILENAME);
-  const flagsFilepath = path.join(configPath, FLAGS_FILENAME);
-  const typeDefPathTypescript = flagsFilepath.replace(FLAGS_FILENAME, FEATURES_TYPEDEF_FILENAME);
-  const typeDefPathJavascript = flagsFilepath.replace(
-    FLAGS_FILENAME,
-    FEATURES_TYPEDEF_FILENAME_JS_COMPAT
-  );
+  const featureStateFilepath = path.join(configPath, FILE_NAMES.FEATURE_STATE_FILENAME);
+  const typeDefPathTypescript = path.join(configPath, FILE_NAMES.FEATURE_TYPES('ts'));
+  const typeDefPathJavascript = path.join(configPath, FILE_NAMES.FEATURE_TYPES('d.ts'));
 
   return {
-    environmentsFilepath,
-    flagsFilepath,
+    featureStateFilepath,
     typeDefPathJavascript,
     typeDefPathTypescript,
   };
 }
 
-/** Loads environments configuration from the given file path. */
-export async function loadEnvironments(environmentsFilepath: string): Promise<Environments> {
-  try {
-    return await readJson(environmentsFilepath);
-  } catch (e) {
-    console.log(e);
-    throw new Error(`Failed to load JSON from ${environmentsFilepath}. Probably not valid JSON!`);
-  }
-}
-
 /** Loads flags state from the given file path. */
-export async function loadFlags(flagsFilepath: string): Promise<FlagsState> {
+export async function loadFeatureState(featureStateFilepath: string): Promise<FeatureState> {
   try {
-    return await readJson(flagsFilepath);
+    return await readJson(featureStateFilepath);
   } catch (e) {
-    console.log(e);
-    throw new Error(`Failed to load JSON from ${flagsFilepath}. Probably not valid JSON!`);
+    log(e);
+    throw new Error(`Failed to load JSON from ${featureStateFilepath}. Probably not valid JSON!`);
   }
 }
 
-/** Logs debug information if debugging is enabled */
-export function log(...args: unknown[]): void {
-  if (ENABLE_DEBUG_LOGGING) {
-    console.log(...args);
-  }
-}
-
-/** Resolves the configuration path by walking up directories until a flags.json file is found. */
-export async function resolveConfigPath(): Promise<string> {
-  const { base, dir, root } = path.parse(process.cwd());
-  let fileFound = false;
-  let currPath = path.join(dir, base);
-
-  while (!fileFound && currPath && currPath !== root) {
-    // eslint-disable-next-line no-await-in-loop
-    fileFound = await pathExists(path.join(currPath, CONFIG_DIRECTORY, FLAGS_FILENAME));
-
-    if (!fileFound) {
-      currPath = currPath.split(path.sep).slice(0, -1).join(path.sep);
-    }
-  }
-
-  if (!fileFound) {
-    throw new Error(
-      `Could not find a ${FLAGS_FILENAME} in CWD or any parent dir. See README.md for more info.`
-    );
-  }
-
-  return path.join(currPath, CONFIG_DIRECTORY);
-}
-
-/** Saves environments to the given file path */
-export async function saveEnvironments(
-  environmentsFilepath: string,
-  environments: Environments
-): Promise<void> {
-  log('writing file', { filepath: environmentsFilepath, state: environments });
-  return writeJson(environmentsFilepath, environments, { spaces: 2 });
+export async function resolveConfigPath(config: Config): Promise<string> {
+  const { CONFIG_PATH } = config;
+  return path.resolve(process.cwd(), CONFIG_PATH);
 }
 
 /** Saves flags state to the given file path */
-export async function saveFlags(flagsFilepath: string, flagsState: FlagsState): Promise<void> {
-  log('writing file', { filepath: flagsFilepath, state: flagsState });
+export async function saveFeatureState(
+  featureStateFilepath: string,
+  featureState: FeatureState
+): Promise<void> {
+  log('writing file', { filepath: featureStateFilepath, state: featureState });
 
-  const flagOutput = Object.keys(flagsState)
-    .sort()
-    .reduce<FlagsState>((output, flagName) => {
-      output[flagName] = flagsState[flagName];
-      return output;
-    }, {});
+  const { environments, features } = featureState;
 
-  return writeJson(flagsFilepath, flagOutput, { spaces: 2 });
+  const sortedFeatureState = getSortedObject({
+    environments: getSortedObject(environments),
+    features: getSortedObject(features),
+  });
+
+  return writeJson(featureStateFilepath, sortedFeatureState, { spaces: 2 });
 }
 
 /** Writes type definitions for the flags */
@@ -144,4 +103,16 @@ export type Features = {
 
   log('writing typedef file', { filepath: typeDefPath, state: flagsState });
   return writeFile(typeDefPath, fileContent);
+}
+
+function getSortedObject<T>(obj: Record<string, T>): Record<string, T> {
+  return Object.keys(obj)
+    .sort()
+    .reduce<Record<string, T>>(
+      (output, key) => {
+        output[key] = obj[key];
+        return output;
+      },
+      {} as Record<string, T>
+    );
 }
