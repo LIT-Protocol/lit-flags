@@ -1,6 +1,6 @@
 {
   "name": "@lit-protocol/flags",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "license": "MIT",
   "packageManager": "pnpm@10.7.0",
   "repository": "https://github.com/LIT-Protocol/lit-flags",
