@@ -34,8 +34,8 @@ jobs:
         with:
           version: pnpm ci:version
           publish: pnpm ci:publish
-          commit: "ci: update versions"
-          title: "ci: update versions"
+          commit: "ci: Release Package"
+          title: "ci: Release PR (changesets-generated)"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT_CI_CHECKS }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
